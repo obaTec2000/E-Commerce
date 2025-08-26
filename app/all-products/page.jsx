@@ -3,10 +3,11 @@ import ProductCard from "@/components/ProductCard";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAppContext } from "@/context/AppContext";
+import Loading from "@/components/Loading";
 
 const AllProducts = () => {
 
-    const { products } = useAppContext();
+    const { products, loading, error } = useAppContext();
 
     return (
         <>
@@ -16,8 +17,12 @@ const AllProducts = () => {
                     <p className="text-2xl font-medium">All products</p>
                     <div className="w-16 h-0.5 bg-orange-600 rounded-full"></div>
                 </div>
+
+        {/* {loading && <p className="mt-8"><Loading/></p>}
+        {error && <p className="mt-8 text-red-600">{error}</p>} */}
+
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 flex-col items-center gap-6 mt-12 pb-14 w-full">
-                    {products.map((product, index) => <ProductCard key={index} product={product} />)}
+                    {!loading && !error && products.map((product, index) => <ProductCard key={index} product={product} />)}
                 </div>
             </div>
             <Footer />

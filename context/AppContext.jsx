@@ -14,14 +14,35 @@ export const AppContextProvider = (props) => {
     const currency = process.env.NEXT_PUBLIC_CURRENCY
     const router = useRouter()
 
-    const [products, setProducts] = useState([])
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [products, setProducts] = useState([]);
     const [userData, setUserData] = useState(false)
     const [isSeller, setIsSeller] = useState(true)
     const [cartItems, setCartItems] = useState({})
 
-    const fetchProductData = async () => {
-        setProducts(productsDummyData)
-    }
+    useEffect(() => {
+        const fetchProductData = async () => {
+            try {
+                setLoading(true)
+                const res = await fetch("https://dummyjson.com/products");
+                if (!res.ok) throw new Error("Failed to fetch products");
+                const data = await res.json()
+                setProducts(data.products)
+            }
+            catch (err) {
+                setError(err.message)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchProductData()
+    }, [])
+
+
+    // const fetchProductData = async () => {
+    //     setProducts(productsDummyData)
+    // }
 
     const fetchUserData = async () => {
         setUserData(userDummyData)
@@ -73,9 +94,7 @@ export const AppContextProvider = (props) => {
         return Math.floor(totalAmount * 100) / 100;
     }
 
-    useEffect(() => {
-        fetchProductData()
-    }, [])
+
 
     useEffect(() => {
         fetchUserData()
@@ -83,13 +102,14 @@ export const AppContextProvider = (props) => {
 
     const value = {
         currency, router,
+        products, loading, error,   // <-- add these
         isSeller, setIsSeller,
         userData, fetchUserData,
-        products, fetchProductData,
         cartItems, setCartItems,
         addToCart, updateCartQuantity,
         getCartCount, getCartAmount
     }
+
 
     return (
         <AppContext.Provider value={value}>
