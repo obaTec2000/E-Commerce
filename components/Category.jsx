@@ -38,19 +38,16 @@ const Category = () => {
             <div className="relative w-full">
                 <h2 className="text-xl font-bold mb-3">Categories</h2>
 
-                <ul className="space-y-2 overflow-x-auto flex flex-row gap-7">
-                    {categories.map(cat => (
-                        <button
+                <ul className="overflow-scroll flex flex-row gap-4 flex-wrap">
+                    {categories.map((cat) => (
+                        <li
                             key={cat}
                             onClick={() => setIfSelected(cat)}
-                            className="cursor-pointer h-fit p-2 min-w-[150px] flex rounded-lg bg-gray-100 hover:bg-gray-200"
+                            className={`cursor-pointer p-2 rounded-lg  hover:bg-gray-200`}
                         >
-                            <p className="">
-                                {cat}
-                            </p>
-                        </button>
-                    ))
-                    }
+                            {cat}
+                        </li>
+                    ))}
                 </ul>
             </div>
 
@@ -58,7 +55,7 @@ const Category = () => {
                 <div>
                     <h2 className="text-xl font-bold mb-3">{ifSelected}</h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 flex-col items-center gap-6 mt-6 pb-14 w-full">
-                        {
+                        {products && products.length > 0 &&
                             products.map((product, index) => <ProductCard key={index} product={product} />
                             )}
                     </div>
